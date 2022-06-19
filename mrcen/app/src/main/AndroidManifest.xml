@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="internalOnly"
+    package="com.cmd.dream.mrcen">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 前台服务权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 手机通话状态权限 -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG" /> <!-- 获取来电号码权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" /> <!-- 获取通知策略权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /><!-- 获取监听开机广播权限 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /><!-- 忽略电池优化 -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:persistent="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".receiver.PhoneStateReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DebugBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED"/>
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+                <action android:name="android.intent.action.SCREEN_ON"/>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.NotificationReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.BootCompleteReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.app.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
