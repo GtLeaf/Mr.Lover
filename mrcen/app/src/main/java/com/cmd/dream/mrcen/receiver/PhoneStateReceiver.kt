@@ -9,6 +9,9 @@ import android.media.AudioManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
+import com.cmd.dream.mrcen.utils.SettingStoreManager
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class PhoneStateReceiver : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
@@ -33,8 +36,12 @@ class PhoneStateReceiver : BroadcastReceiver() {
                 if(audioManager.ringerMode == AudioManager.RINGER_MODE_SILENT) {
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
                 }
-                val maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVol/2, AudioManager.FLAG_SHOW_UI)
+                val currentVol = runBlocking {
+                    val vol = SettingStoreManager(context).getIntData(SettingStoreManager.VOL_KEY).first() - 1
+                    vol
+                }
+//                val maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, currentVol, AudioManager.FLAG_SHOW_UI)
                 Log.d(TAG, "**********************监测到电话呼入!!!!**************")
             }
             TelephonyManager.CALL_STATE_OFFHOOK -> {

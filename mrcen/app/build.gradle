@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Android\\KeyStore\\GtLeaf.jks')
+            keyAlias = 'GtLeaf'
+            keyPassword '3799@Qq.gooGle$C'
+            storePassword 'cen@google.com$3799'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
     defaultConfig {
@@ -17,9 +25,14 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -34,4 +47,13 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     implementation 'com.guolindev.permissionx:permissionx:1.5.0'
+    //dataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    // optional - RxJava3 support
+    implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0"
+
+    //rxjava
+    implementation "io.reactivex.rxjava3:rxjava:3.0.0-RC0"
+    //gson
+    implementation'com.google.code.gson:gson:2.8.6'
 }
